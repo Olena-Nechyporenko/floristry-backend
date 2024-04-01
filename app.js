@@ -3,6 +3,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const bouquetsRouter = require("./routes/api/bouquets");
+const ordersRouter = require("./routes/api/orders");
+const consultationsRouter = require("./routes/api/consultations");
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/bouquets", bouquetsRouter);
+app.use("/api/orders", ordersRouter);
+app.use("/api/consultations", consultationsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
