@@ -44,7 +44,7 @@ const registerSchema = Joi.object({
 });
 
 const emailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string(),
 });
 
 const loginSchema = Joi.object({
@@ -53,6 +53,5 @@ const loginSchema = Joi.object({
 });
 
 const User = model("user", userSchema);
-console.log(User.findOne);
 
 module.exports = { User, registerSchema, emailSchema, loginSchema };

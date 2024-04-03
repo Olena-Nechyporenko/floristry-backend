@@ -1,18 +1,14 @@
 // const express = require("express");
-const { HttpError, croppedImg, sendEmail } = require("../helpers/index.js");
+const { HttpError, sendEmail } = require("../helpers/index.js");
 const { ctrlWrapper } = require("../decorators/index.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const gravatar = require("gravatar");
-const path = require("path");
-const fs = require("fs").promises;
 const { nanoid } = require("nanoid");
 
-const User = require("../models/users.js");
-console.log(User.findOne);
+const { User } = require("../models/users.js");
 const { JWT_SECRET, BASE_URL } = process.env;
-const avatarsDir = path.resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -64,8 +60,8 @@ const verifyEmail = async (req, res) => {
 };
 
 const resendVerifyEmail = async (req, res) => {
-  const { email, verificationToken } = req.params;
-  console.log(verificationToken);
+  const { email, verificationToken } = req.body;
+  console.log(email);
 
   const user = await User.findOne({ email });
   if (!user) {
@@ -113,10 +109,9 @@ const signin = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { email } = req.user;
   res.json({
     email,
-    subscription,
   });
 };
 
@@ -128,34 +123,6 @@ const logout = async (req, res) => {
   });
 };
 
-const updateSubscription = async (req, res) => {
-  const { _id } = req.user;
-  const result = await User.findByIdAndUpdate(_id, req.body, {
-    new: true,
-  });
-  if (!result) {
-    throw HttpError(404);
-  }
-  res.json(result);
-};
-
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  await croppedImg(tempUpload);
-
-  const resultUpload = path.join(avatarsDir, filename);
-
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", filename);
-  await User.findByIdAndUpdate(_id, { avatarURL });
-
-  res.json({
-    avatarURL,
-  });
-};
-
 module.exports = {
   signup: ctrlWrapper(signup),
   verifyEmail: ctrlWrapper(verifyEmail),
@@ -163,6 +130,4 @@ module.exports = {
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
-  updateSubscription: ctrlWrapper(updateSubscription),
-  updateAvatar: ctrlWrapper(updateAvatar),
 };
