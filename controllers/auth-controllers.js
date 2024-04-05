@@ -109,9 +109,10 @@ const signin = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email } = req.user;
+  const { email, verify } = req.user;
   res.json({
     email,
+    verify,
   });
 };
 
