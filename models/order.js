@@ -36,6 +36,11 @@ const orderSchema = new Schema(
         composition: { type: Array, required: true },
       },
     ],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
