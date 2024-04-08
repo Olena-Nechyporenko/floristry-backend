@@ -6,7 +6,7 @@ const bouquetsRouter = require("./routes/api/bouquets");
 const ordersRouter = require("./routes/api/orders");
 const consultationsRouter = require("./routes/api/consultations");
 const authRouter = require("./routes/api/auth");
-// const checkoutRouter = require("./routes/api/checkout");
+const checkoutRouter = require("./routes/api/checkout");
 
 dotenv.config();
 
@@ -23,7 +23,7 @@ app.use("/api/bouquets", bouquetsRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/api/consultations", consultationsRouter);
 app.use("/api/auth", authRouter);
-// app.use("/api/checkout", checkoutRouter);
+app.use("/api/checkout", checkoutRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

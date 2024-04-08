@@ -1,7 +1,7 @@
-// const express = require("express");
-// const router = express.Router();
-// const checkoutController = require("../../controllers/checkout");
+const express = require("express");
+const router = express.Router();
+const checkoutController = require("../../controllers/checkout");
 
-// router.post("/", checkoutController.checkout);
+router.post("/", checkoutController.checkout);
 
-// module.exports = router;
+module.exports = router;
