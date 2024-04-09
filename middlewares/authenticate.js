@@ -14,16 +14,11 @@ const authenticate = async (req, res, next) => {
   const [bearer, token] = authorization.split(" ");
 
   if (bearer !== "Bearer") {
-    next(HttpError(401));
+    return next(HttpError(401));
   }
   try {
     const { id } = jwt.verify(token, JWT_SECRET);
-
-    console.log(id);
-
     const user = await User.findById(id);
-    console.log("jjj");
-    console.log(user);
 
     if (!user || !user.token || token !== user.token) {
       return next(HttpError(401));

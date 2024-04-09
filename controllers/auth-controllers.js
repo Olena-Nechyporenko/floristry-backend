@@ -1,4 +1,3 @@
-// const express = require("express");
 const { HttpError, sendEmail } = require("../helpers/index.js");
 const { ctrlWrapper } = require("../decorators/index.js");
 const bcrypt = require("bcrypt");
@@ -12,16 +11,15 @@ const { JWT_SECRET, BASE_URL } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+
   const user = await User.findOne({ email });
-  console.log(user);
+
   if (user) {
     throw HttpError(409, "Email already exists");
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
   const verificationToken = nanoid();
-  console.log(verificationToken);
 
   const newUser = await User.create({
     ...req.body,
@@ -34,7 +32,7 @@ const signup = async (req, res) => {
     subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
   };
-  console.log(newUser);
+
   await sendEmail(verifyEmail);
 
   res.status(201).json({
@@ -44,7 +42,7 @@ const signup = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  console.log(verificationToken);
+
   const user = await User.findOne({ verificationToken });
 
   if (!user) {
@@ -61,7 +59,6 @@ const verifyEmail = async (req, res) => {
 
 const resendVerifyEmail = async (req, res) => {
   const { email, verificationToken } = req.body;
-  console.log(email);
 
   const user = await User.findOne({ email });
   if (!user) {
