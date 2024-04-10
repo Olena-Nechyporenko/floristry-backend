@@ -10,8 +10,8 @@ const checkout = async (req, res) => {
       payment_method_types: ["card"],
       line_items: req.body.lineItems,
       mode: "payment",
-      success_url: "https://olena-nechyporenko.github.io/floristry/success",
-      cancel_url: "https://olena-nechyporenko.github.io/floristry/failure",
+      success_url: "https://floristry-app.netlify.app/success",
+      cancel_url: "https://floristry-app.netlify.app/failure",
     });
     return res.status(201).json(session);
   } catch (error) {
