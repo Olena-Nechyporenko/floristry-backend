@@ -37,7 +37,23 @@ const signup = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
+    isVerify: newUser.verify,
   });
+};
+
+const verifyStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Отправляем информацию о статусе верификации пользователя
+    res.status(201).json({ verify: user.verify });
+  } catch (error) {
+    console.error("Error fetching verification status:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 const verifyEmail = async (req, res) => {
@@ -132,4 +148,5 @@ module.exports = {
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  verifyStatus: ctrlWrapper(verifyStatus),
 };
