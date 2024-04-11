@@ -4,6 +4,7 @@ const {
   loginSchema,
   registerSchema,
   emailSchema,
+  verifyStatus,
 } = require("../../models/users.js");
 
 const authController = require("../../controllers/auth-controllers.js");
@@ -23,6 +24,7 @@ router.post(
   validateBody(emailSchema),
   authController.resendVerifyEmail
 );
+router.get("/verifyStatus/:userId", authController.verifyStatus);
 router.post(
   "/signin",
   isEmptyBody,
