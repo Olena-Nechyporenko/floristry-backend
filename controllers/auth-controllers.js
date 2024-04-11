@@ -37,7 +37,6 @@ const signup = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
-    token: newUser.verificationToken,
   });
 };
 
@@ -55,6 +54,7 @@ const verifyEmail = async (req, res) => {
   });
   res.json({
     message: "Verification successful",
+    verify: true,
   });
 };
 
@@ -78,6 +78,7 @@ const resendVerifyEmail = async (req, res) => {
   res.json({
     message: "Verification email sent",
   });
+  await signin(req, res);
 };
 
 const signin = async (req, res) => {
