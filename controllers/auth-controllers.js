@@ -37,6 +37,7 @@ const signup = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
+    token: newUser.verificationToken,
   });
 };
 
