@@ -1,11 +1,6 @@
 const express = require("express");
 const validateBody = require("../../decorators/validateBody.js");
-const {
-  loginSchema,
-  registerSchema,
-  emailSchema,
-  verifyStatus,
-} = require("../../models/users.js");
+const { loginSchema, registerSchema } = require("../../models/users.js");
 
 const authController = require("../../controllers/auth-controllers.js");
 
@@ -18,13 +13,13 @@ router.post(
   validateBody(registerSchema),
   authController.signup
 );
-router.get("/verify/:verificationToken", authController.verifyEmail);
-router.post(
-  "/verify",
-  validateBody(emailSchema),
-  authController.resendVerifyEmail
-);
-router.get("/verifyStatus/:userId", authController.verifyStatus);
+// router.get("/verify/:verificationToken", authController.verifyEmail);
+// router.post(
+//   "/verify",
+//   validateBody(emailSchema),
+//   authController.resendVerifyEmail
+// );
+// router.get("/verifyStatus/:userId", authController.verifyStatus);
 router.post(
   "/signin",
   isEmptyBody,
