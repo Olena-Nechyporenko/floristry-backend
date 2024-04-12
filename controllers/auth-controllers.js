@@ -37,7 +37,6 @@ const signup = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
-    isVerify: newUser.verify,
   });
 };
 
