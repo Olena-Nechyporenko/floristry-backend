@@ -11,32 +11,42 @@ const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(email);
   const user = await User.findOne({ email });
 
   if (user) {
     throw HttpError(409, "Email already exists");
   }
-  const hashPassword = await bcrypt.hash(password, 10);
-  // const avatarURL = gravatar.url(email);
-  // const verificationToken = nanoid();
 
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  // Создаем нового пользователя
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    // avatarURL,
-    // verificationToken,
   });
+
+  // Генерируем JWT-токен
+  const payload = {
+    id: newUser._id,
+  };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+
+  // Обновляем поле токена в базе данных
+  await User.findByIdAndUpdate(newUser._id, { token });
+
+  // Отправляем подтверждение регистрации на электронную почту
   const confirmRegistration = {
     to: email,
     subject: "Registration successful",
     html: "Thank you for the registration! Welcome to Floristic Paradise!",
   };
-
   await sendEmail(confirmRegistration);
 
+  // Возвращаем данные о пользователе с токеном
   res.status(201).json({
-    email: newUser.email,
+    token,
+    user: newUser,
   });
 };
 
