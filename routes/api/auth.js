@@ -1,25 +1,18 @@
 const express = require("express");
-const validateBody = require("../../decorators/validateBody.js");
-const { loginSchema, registerSchema } = require("../../models/users.js");
-
+const router = express.Router();
 const authController = require("../../controllers/auth-controllers.js");
 
-const isEmptyBody = require("../../middlewares/isEmptyBody.js");
-const authenticate = require("../../middlewares/authenticate.js");
-const router = express.Router();
+const { loginSchema, registerSchema } = require("../../models/users.js");
+
+const { validateBody } = require("../../decorators/index.js");
+const { isEmptyBody, authenticate } = require("../../middlewares/index.js");
+
 router.post(
   "/signup",
   isEmptyBody,
   validateBody(registerSchema),
   authController.signup
 );
-// router.get("/verify/:verificationToken", authController.verifyEmail);
-// router.post(
-//   "/verify",
-//   validateBody(emailSchema),
-//   authController.resendVerifyEmail
-// );
-// router.get("/verifyStatus/:userId", authController.verifyStatus);
 router.post(
   "/signin",
   isEmptyBody,
